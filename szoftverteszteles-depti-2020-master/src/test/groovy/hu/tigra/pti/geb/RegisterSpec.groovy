@@ -21,8 +21,11 @@ class RegisterSpec extends BaseSpec {
         registerPage.firstName = 'Elek'
         registerPage.lastName = 'Teszt'
         registerPage.password = 'teszt123'
+        registerPage.newslatter.check()
+        registerPage.optin.check()
+        registerPage.registerButton2.click()
 
         then: '5 hibaüzenet jelenik meg'
-        true
+        registerPage.errorMessages.values.any{errorMessage -> errorMessage == "Authentication failed."}
     }
 }
