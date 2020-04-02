@@ -19,6 +19,6 @@ class RegisterPage extends Page {
         newslatter { $('input[id="newsletter"]').module(geb.module.Checkbox)}
         optin { $('input[id="optin"]').module(geb.module.Checkbox) }
         registerButton2 { $('button[id="submitAccount"]') }
-        errorMessages(required: false) { $('div[class="alert alert-danger"]:first-of-type').module ErrorMessages }
+        errorMessages{ $('div[class="alert alert-danger"] ol li')}
     }
 }

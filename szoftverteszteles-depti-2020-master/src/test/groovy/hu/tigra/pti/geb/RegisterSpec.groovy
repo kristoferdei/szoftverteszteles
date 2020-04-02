@@ -26,6 +26,6 @@ class RegisterSpec extends BaseSpec {
         registerPage.registerButton2.click()
 
         then: '5 hibaüzenet jelenik meg'
-        registerPage.errorMessages.values.any{errorMessage -> errorMessage == "Authentication failed."}
+        registerPage.errorMessages.size() == 5
     }
 }
