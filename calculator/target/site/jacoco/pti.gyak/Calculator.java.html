@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="hu"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Calculator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">calculator</a> &gt; <a href="index.source.html" class="el_package">pti.gyak</a> &gt; <span class="el_source">Calculator.java</span></div><h1>Calculator.java</h1><pre class="source lang-java linenums">package pti.gyak;
+
+import java.util.Collections;
+import java.util.List;
+
+<span class="fc" id="L6">public class Calculator {</span>
+    public static final String SEPARATOR = &quot; &quot;;
+
+<span class="fc" id="L9">    protected Number result = 0;</span>
+<span class="fc" id="L10">    protected String expression = &quot;&quot;;</span>
+<span class="fc" id="L11">    protected List&lt;String&gt; history = Collections.emptyList();</span>
+
+    private Operation lastOperation;
+
+    public Calculator enter(Number number) {
+<span class="pc bpc" id="L16" title="1 of 4 branches missed.">        if (number != null &amp;&amp; lastOperation != null) {</span>
+<span class="pc bpc" id="L17" title="1 of 7 branches missed.">            switch(lastOperation) {</span>
+                case ADD:
+<span class="fc" id="L19">                    result = result.doubleValue() + number.doubleValue();</span>
+<span class="fc" id="L20">                    break;</span>
+                case SUBSTRACT:
+<span class="fc" id="L22">                    result = result.doubleValue() - number.doubleValue();</span>
+<span class="fc" id="L23">                    break;</span>
+                case MULTIPLY:
+<span class="fc" id="L25">                    result = result.doubleValue() * number.doubleValue();</span>
+<span class="fc" id="L26">                    break;</span>
+                case DIVIDE:
+<span class="fc bfc" id="L28" title="All 2 branches covered.">                    if (number.doubleValue() != 0) {</span>
+<span class="fc" id="L29">                        result = result.doubleValue() / number.doubleValue();</span>
+                    }
+<span class="fc bfc" id="L31" title="All 2 branches covered.">                    else if (result.doubleValue() &gt; 0) {</span>
+<span class="fc" id="L32">                        result = Double.POSITIVE_INFINITY;</span>
+                    }
+                    else {
+<span class="fc" id="L35">                        result = Double.NEGATIVE_INFINITY;</span>
+                    }
+<span class="fc" id="L37">                    break;</span>
+                case REMAINDER:
+<span class="fc" id="L39">                    result = result.doubleValue() % number.doubleValue();</span>
+<span class="fc" id="L40">                    break;</span>
+                case POWER:
+<span class="fc" id="L42">                    result = Math.pow(result.doubleValue(), number.doubleValue());</span>
+<span class="fc" id="L43">                    break;</span>
+                default:
+                    break;
+            }
+<span class="fc" id="L47">            expression = expression + SEPARATOR + lastOperation + SEPARATOR + number;</span>
+<span class="fc" id="L48">            lastOperation = null;</span>
+        } else {
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">            if (!expression.isEmpty()) {</span>
+<span class="nc" id="L51">                history.add(expression + &quot; = &quot; + resultString());</span>
+            }
+<span class="fc" id="L53">            result = number;</span>
+<span class="fc" id="L54">            expression = &quot;&quot; + number;</span>
+        }
+<span class="fc" id="L56">        return this;</span>
+    }
+
+    public Calculator enter(Operation operation) {
+<span class="pc bpc" id="L60" title="1 of 2 branches missed.">        if (operation != null) {</span>
+<span class="fc bfc" id="L61" title="All 12 branches covered.">            if (operation == Operation.ADD || operation == Operation.SUBSTRACT || operation == Operation.MULTIPLY</span>
+                    || operation == Operation.DIVIDE || operation == Operation.REMAINDER || operation == Operation.POWER) {
+<span class="fc" id="L63">                lastOperation = operation;</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">            } else if (operation == Operation.SQRT) {</span>
+<span class="fc" id="L65">                result = Math.sqrt(result.doubleValue());</span>
+<span class="fc" id="L66">                expression = operation + &quot;(&quot; + expression + &quot;)&quot;;</span>
+<span class="fc" id="L67">                lastOperation = null;</span>
+<span class="pc bpc" id="L68" title="1 of 2 branches missed.">            } else if (operation == Operation.CLEAR) {</span>
+<span class="fc" id="L69">                result = 0;</span>
+<span class="fc" id="L70">                expression = &quot;&quot;;</span>
+<span class="fc" id="L71">                lastOperation = null;</span>
+            }
+<span class="fc" id="L73">            return this;</span>
+        }
+<span class="nc" id="L75">        return this;</span>
+    }
+
+    public String getHistory() {
+<span class="fc" id="L79">        StringBuilder s = new StringBuilder();</span>
+<span class="pc bpc" id="L80" title="1 of 2 branches missed.">        if (history.isEmpty())</span>
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">          for (String h: history) {</span>
+<span class="nc" id="L82">             s.append(h).append(&quot;\n&quot;);</span>
+<span class="nc" id="L83">          }</span>
+
+<span class="fc" id="L85">        s.append(expression).append(&quot; = &quot;).append(resultString());</span>
+<span class="fc" id="L86">        return s.toString();</span>
+    }
+
+    private String resultString() {
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">        return result.doubleValue() % 1 == 0 ? &quot;&quot; + result.intValue() : result.toString();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
